@@ -39,3 +39,21 @@ The Semaphore Management script is using the **query** method to show the curren
 
 ## Libs
 Using Bootstrap (4.5.2), JQuery (3.5.1) and Popper (1.16.0) 
+
+## Examples
+Here you can see an example of usage of this web-app.
+
+In the image you can see the semaphore area at the top
+
+In the booking area you can book a slot typing your name.
+
+![Main Page](https://github.com/roberto-carnevale/Meeting_Mngt/blob/main/main.png)
+
+*picture 1*
+
+In the management page you can see the **query** effect: the agenda is shown only for the manager/trainer and the button to change to red/green the semaphor of the manager.
+
+![Management Page](https://github.com/roberto-carnevale/Meeting_Mngt/blob/main/mngt.png)
+
+*picture 2*
+
