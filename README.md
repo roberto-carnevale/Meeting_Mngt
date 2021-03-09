@@ -11,31 +11,36 @@ The code is able to manage theoretical undefined number of semaphors and meeting
 ## Basic site configuration
 Typically we will create an home page where to list semaphors.
 
-Semaphors aims to display when the manager/trainer is open and closed the previous meeting.
+Semaphors aims to display when the manager/trainer is open or still in the previous meeting.
 
-Main code can also be included in the home page.
+*Main code* can also be included in the home page (as shown in picture 1 - Booking Area).
+Without queries the *Main code* is able to open a booking slot web-app splitting the different agendas in foldable tables.
 
-Without queries is able to open a booking slot web-app splitting the different agendas in foldable tables.
-
-## Management pages
+## Google Spreadsheet data guidance
 In the "setup" tab of the spreadsheet you can see 4 columns
 1. The name of the query
 1. The semaphore status (TRUE=GREEN; FALSE = RED)
 1. THe wordy name of the manager/trainer
 1. Active flag (FALSE=not shown; TRUE=shown)
 
-## How to use the query
+In the "appuntamenti" tab we listall the meetings in 4 columns:
+1. The query guide-string
+1. Date of the meeting
+1. Time of the meeting
+1. Name of the booker
+
+## How to use the query-string
 Each script, a part from semaphore listing, can be called with a query:
 
-`https://script.google.com/macros/s/<SCRIPT_ID>/exec?`**query**
+`https://script.google.com/macros/s/<SCRIPT_ID>/exec?`**query-string**
 
-where **query** is the first column link in the Google Spreadsheet column.
+where **query-string** is the first column link in the Google Spreadsheet column.
 
 
 ## Management page
-The main code is listing the agenda per the manager using the **query** method.
+The main code is listing the agenda per the manager using the **query-string** method.
 
-The Semaphore Management script is using the **query** method to show the current status and expose two buttons to manage the status.
+The Semaphore Management script is using the **query-string** method to show the current status and expose two buttons to manage the status.
 
 ## Libs
 Using Bootstrap (4.5.2), JQuery (3.5.1) and Popper (1.16.0) 
