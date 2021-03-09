@@ -9,6 +9,19 @@
   <span class="sr-only">Loading...</span>
 </div>
 
+<script>
+function checkData(value, line) {
+  if (value) {
+    $('#spinner').show();
+    google.script.run.withSuccessHandler(OK).withFailureHandler(KO).prenota(value,line);
+  } else {
+    $('#conf'+line).removeClass("btn btn-primary mb-2");
+    $('#conf'+line).addClass("btn btn-danger mb-2");
+    setTimeout(() => {$('#conf'+line).removeClass("btn btn-danger mb-2").addClass("btn btn-primary mb-2");}, 1000 );
+  }
+}
+</script>
+
 <div id="resultLine"/>
 <? for (let i in data_split) { if (data_split[i].active) {?>
   <button onclick="collapseAll();" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_id_<?=data_split[i].code ?>" aria-expanded="false" aria-controls="collapse_id_<?=data_split[i].code ?>">
@@ -40,7 +53,9 @@
               <?= data_split[i].meeting[j].data[2].toLocaleTimeString("it-IT", {timeZone: "Europe/Rome"}) ?>
             </td>
             <td> <? if (!data_split[i].meeting[j].data[3]) { ?>
-              <input type="text" id="nome<?= data_split[i].meeting[j].line ?>" placeholder="Scrivi il nome e &quot;Prenota&quot;"></input>&nbsp;&nbsp;<button onclick="$('#spinner').show(); google.script.run.withSuccessHandler(OK).withFailureHandler(KO).prenota(document.getElementById('nome<?= data_split[i].meeting[j].line ?>').value, <?= data_split[i].meeting[j].line ?>);" class="btn btn-primary mb-2">Prenota</button>  
+              <input type="text" id="nome<?= data_split[i].meeting[j].line ?>" placeholder="Scrivi il nome e &quot;Prenota&quot;"></input>
+              &nbsp;&nbsp;
+              <button onclick="checkData(document.getElementById('nome<?= data_split[i].meeting[j].line ?>').value, <?= data_split[i].meeting[j].line ?>)" id="conf<?= data_split[i].meeting[j].line ?>" class="btn btn-primary mb-2">Prenota</button>  
             <? } else {?>
               <?= data_split[i].meeting[j].data[3] ?>&nbsp;&nbsp;<button onclick="confermaCancellazione( <?= data_split[i].meeting[j].line ?>,<?= data_split[i].meeting[j].data[3] ?>);" class="btn btn-warning mb-2">Cancella</button>
             <? } ?>
@@ -54,22 +69,39 @@
 </div>
 
 
+
 <script>
-function OK() {$('#spinner').hide();document.getElementById('resultLine').innerHTML='Prenotazione/Cancellazione Effettuata. Ricarica la pagina e verifica la correttezza dell&quot;operazione';}
-function KO() {$('#spinner').hide();document.getElementById('resultLine').innerHTML='Prenotazione Errata / Sovrapposizione. Ricaricare e riprovare, grazie.';}
-function confermaCancellazione(i, nome) {$('#spinner').hide();document.getElementById('fullTable').innerHTML="";
+function OK() {
+  $('#spinner').hide();
+  document.getElementById('resultLine').innerHTML='<font style="color:ForestGreen;font-size: 2em;font-weight: bold;">Prenotazione/Cancellazione Effettuata.</font><br/>Ricarica la pagina e verifica la correttezza dell&quot;operazione';
+}
+
+function KO() {
+  $('#spinner').hide();
+  document.getElementById('resultLine').innerHTML='<font style="color:red;font-size: 2em;font-weight: bold;">Prenotazione Errata / Sovrapposizione.<br/> Ricaricare e riprovare, grazie.</font> ';
+}
+
+function confermaCancellazione(i, nome) {
+  $('#spinner').hide();
+  document.getElementById('fullTable').innerHTML="";
   document.getElementById('resultLine').innerHTML = '<button onclick="cancellazioneConfermata('+i+');" class="btn btn-danger">Cancella la prenotazione di '+nome+'</button><div> Per annullare ricarica la pagina</div>';
 }
+
 function cancellazioneConfermata(i) {$('#spinner').show();
   google.script.run.withSuccessHandler(OK).withFailureHandler(KO).cancella(i);
 }
-function collapseAll() {$('#collapse_id_aaa1').collapse('hide');$('#collapse_id_bbb2').collapse('hide');$('#collapse_id_ccc3').collapse('hide');$('#collapse_id_ddd4').collapse('hide');$('#collapse_id_eee5').collapse('hide');$('#collapse_id_fff6').collapse('hide');}
-</script>
 
-<script>
 function collapseAll() {
-<? for (let i in data_split) { if (data_split[i].active) {?>
-  $('#collapse_id_<?=data_split[i].code ?>').collapse('hide');
-<? } } ?>
-  }
+  $('#collapse_id_aaa1').collapse('hide');
+  $('#collapse_id_bbb2').collapse('hide');
+  $('#collapse_id_ccc3').collapse('hide');
+  $('#collapse_id_ddd4').collapse('hide');
+  $('#collapse_id_eee5').collapse('hide');
+  $('#collapse_id_fff6').collapse('hide');}
+
+function collapseAll() {
+  <? for (let i in data_split) { if (data_split[i].active) {?>
+    $('#collapse_id_<?=data_split[i].code ?>').collapse('hide');
+  <? } } ?>
+}
 </script>
