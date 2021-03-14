@@ -1,39 +1,3 @@
-function doGet_old(e) {
-  var params = JSON.stringify(e);
-  Logger.log(params);
-  let query = e.queryString;
-  Logger.log(query);
-  
-  let set_data = SpreadsheetApp.openById('1ioPOH3FsNNEGbJ6rqR6pdb_4p8Q86iqzOvqziC0aARE').getSheetByName('setup').getDataRange().getValues();
-  let meet_data = SpreadsheetApp.openById('1ioPOH3FsNNEGbJ6rqR6pdb_4p8Q86iqzOvqziC0aARE').getSheetByName('appuntamenti').getDataRange().getValues();
-  
-  let set_list = {};
-  for (let i in set_data) {
-    set_list[set_data[i][0]] = set_data[i][2];
-  }
-
-  if (query) {
-    var html = HtmlService.createTemplateFromFile("Int_page");
-    html.data = meet_data;
-    html.name = set_list[query];
-    html.query = query;
-    html.list = set_list;
-    let ev = html.evaluate();
-    Logger.log(ev.getContent());
-    return ev;
-  } else {
-    var html = HtmlService.createTemplateFromFile("Ext_page");
-    html.data = meet_data;
-    html.query = query
-    html.list = set_list;
-    html.days = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
-    let ev = html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME);
-    //Logger.log(ev.getContent());
-    return ev;
-  }
-
-}
-
 function doGet(e) {
   var params = JSON.stringify(e);
   Logger.log(params);
@@ -42,6 +6,7 @@ function doGet(e) {
   
   let set_data = SpreadsheetApp.openById('1ioPOH3FsNNEGbJ6rqR6pdb_4p8Q86iqzOvqziC0aARE').getSheetByName('setup').getDataRange().getValues();
   let meet_data = SpreadsheetApp.openById('1ioPOH3FsNNEGbJ6rqR6pdb_4p8Q86iqzOvqziC0aARE').getSheetByName('appuntamenti').getDataRange().getValues();
+  let avvisi = SpreadsheetApp.openById('1ioPOH3FsNNEGbJ6rqR6pdb_4p8Q86iqzOvqziC0aARE').getSheetByName('Avvisi').getRange("A1").getValue();
   
   let set_list = {};
   for (let i in set_data) {
@@ -60,10 +25,11 @@ function doGet(e) {
   } else {
     var html = HtmlService.createTemplateFromFile("Ext_split_page");
     html.data = meet_data;
+    html.avvisi = avvisi;
     html.data_split = split_data(set_data, meet_data);
     html.query = query
     html.list = set_list;
-    html.days = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
+    html.days = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
     let ev = html.evaluate();
     Logger.log(ev.getContent());
     return ev;
