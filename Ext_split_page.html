@@ -8,20 +8,7 @@
 <div class="spinner-grow text-warning" role="status" id="spinner" style="display: none;">
   <span class="sr-only">Loading...</span>
 </div>
-
-<script>
-function checkData(value, line) {
-  if (value) {
-    $('#spinner').show();
-    google.script.run.withSuccessHandler(OK).withFailureHandler(KO).prenota(value,line);
-  } else {
-    $('#conf'+line).removeClass("btn btn-primary mb-2");
-    $('#conf'+line).addClass("btn btn-danger mb-2");
-    setTimeout(() => {$('#conf'+line).removeClass("btn btn-danger mb-2").addClass("btn btn-primary mb-2");}, 1000 );
-  }
-}
-</script>
-
+<div id="avvisi"><? if (avvisi) {?><div class="alert alert-warning" role="alert"> <?= avvisi ?> </div><?}?></div>
 <div id="resultLine"/>
 <? for (let i in data_split) { if (data_split[i].active) {?>
   <button onclick="collapseAll();" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_id_<?=data_split[i].code ?>" aria-expanded="false" aria-controls="collapse_id_<?=data_split[i].code ?>">
@@ -47,7 +34,7 @@ function checkData(value, line) {
               <?= data_split[i].name ?>
             </td>
             <td>
-              <?= days[(new Date(data_split[i].meeting[j].data[1].setUTCHours(12))).getDay()] ?>&nbsp;<?= data_split[i].meeting[j].data[1].toLocaleDateString("it-IT", {timeZone: "Europe/Rome"}) ?>
+              <?= days[data_split[i].meeting[j].data[1].getDay()] ?>&nbsp;<?= data_split[i].meeting[j].data[1].toLocaleDateString("it-IT", {timeZone: "Europe/Rome"}) ?>
             </td>
             <td>
               <?= data_split[i].meeting[j].data[2].toLocaleTimeString("it-IT", {timeZone: "Europe/Rome"}) ?>
@@ -69,8 +56,18 @@ function checkData(value, line) {
 </div>
 
 
-
 <script>
+function checkData(value, line) {
+  if (value) {
+    $('#spinner').show();
+    google.script.run.withSuccessHandler(OK).withFailureHandler(KO).prenota(value,line);
+  } else {
+    $('#conf'+line).removeClass("btn btn-primary mb-2");
+    $('#conf'+line).addClass("btn btn-danger mb-2");
+    setTimeout(() => {$('#conf'+line).removeClass("btn btn-danger mb-2").addClass("btn btn-primary mb-2");}, 1000 );
+  }
+}
+
 function OK() {
   $('#spinner').hide();
   document.getElementById('resultLine').innerHTML='<font style="color:ForestGreen;font-size: 2em;font-weight: bold;">Prenotazione/Cancellazione Effettuata.</font><br/>Ricarica la pagina e verifica la correttezza dell&quot;operazione';
